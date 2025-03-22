@@ -2,137 +2,123 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>欢迎小助手</title>
+    <title>lets 穿越</title>
     <style>
         body {
-            font-family: 'Comic Sans MS', cursive;
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            font-family: Arial, sans-serif;
+            background: #f0f9ff;
             height: 100vh;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             margin: 0;
         }
 
-        .container {
-            text-align: center;
+        .card {
+            background: white;
             padding: 2rem;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            transition: all 0.5s ease;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
         }
 
         input {
-            padding: 12px 20px;
-            font-size: 18px;
-            border: 3px solid #ff85a2;
-            border-radius: 30px;
-            margin: 20px 0;
-            width: 250px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        input:focus {
-            border-color: #ff627d;
-            box-shadow: 0 0 15px #ff85a2;
+            display: block;
+            margin: 20px auto;
+            padding: 10px;
+            width: 200px;
+            border: 2px solid #2196F3;
+            border-radius: 5px;
+            font-size: 16px;
         }
 
         button {
-            padding: 15px 30px;
-            font-size: 18px;
-            background: #ff85a2;
+            background: #2196F3;
             color: white;
             border: none;
-            border-radius: 30px;
+            padding: 12px 24px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            transform-style: preserve-3d;
+            transition: background 0.3s;
+            font-size: 16px;
         }
 
         button:hover {
-            background: #ff627d;
-            transform: translateY(-3px) rotate(2deg);
-            box-shadow: 0 5px 15px rgba(255, 98, 125, 0.4);
+            background: #1976D2;
         }
 
-        button:active {
-            transform: translateY(0) rotate(0);
-        }
-
-        .welcome-message {
+        #result {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
             display: none;
-            font-size: 2em;
-            color: #ff627d;
-            animation: bounce 1s ease;
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-30px);
-            }
-            60% {
-                transform: translateY(-15px);
-            }
+        .success {
+            background: #e8f5e9;
+            color: #2e7d32;
         }
 
-        .emoji {
-            font-size: 2em;
-            margin-top: 20px;
+        .error {
+            background: #ffebee;
+            color: #c62828;
         }
     </style>
 </head>
 <body>
-    <div class="container" id="inputContainer">
-        <h1>✨ 欢迎来到快乐星球！ ✨</h1>
-        <input type="text" id="nameInput" placeholder="请输入你的名字">
-        <br>
-        <button onclick="showWelcome()">开始冒险！</button>
-    </div>
-
-    <div class="container" id="welcomeContainer" style="display: none;">
-        <p class="welcome-message" id="welcomeMessage"></p>
-        <div class="emoji">🎉 🌟 🎈</div>
+    <div class="card">
+        <h2>欢迎进入新世界</h2>
+        <input type="text" id="nameInput" placeholder="输入您的姓名">
+        <button onclick="openNewTab()">开启旅程</button>
+        <div id="result"></div>
     </div>
 
     <script>
-        function showWelcome() {
+        function openNewTab() {
             const name = document.getElementById('nameInput').value.trim();
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = '';
+            resultDiv.innerHTML = '';
+
             if (!name) {
-                alert('请先输入你的名字哦～');
+                resultDiv.className = 'error';
+                resultDiv.innerHTML = '⚠️ 请输入有效姓名';
+                resultDiv.style.display = "block";
                 return;
             }
+            const newWindow = window.open('', '_blank');
 
-            // 切换容器显示
-            document.getElementById('inputContainer').style.display = 'none';
-            const welcomeContainer = document.getElementById('welcomeContainer');
-            welcomeContainer.style.display = 'block';
-
-            // 创建动态欢迎语
-            const messages = [
-                `欢迎 ${name}！🎉`,
-                `${name} 驾到！👑`,
-                `发现 ${name}！🚀`,
-                `你好呀 ${name}！🌸`
-            ];
-            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-
-            document.getElementById('welcomeMessage').textContent = randomMessage;
-
-            // 添加彩虹文字效果
-            welcomeContainer.style.background = 'linear-gradient(45deg, #ff6b6b, #ff9f43, #feca57, #2ecc71, #54a0ff, #5f27cd)';
-        }
-
-        // 添加回车键支持
-        document.getElementById('nameInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                showWelcome();
+            if (!newWindow) {
+                resultDiv.className = 'error';
+                resultDiv.innerHTML = '⚠️ 请允许弹出窗口<br><small>点击地址栏的弹出窗口图标进行设置</small>';
+                resultDiv.style.display = "block";
+                return;
             }
+            resultDiv.className = 'success';
+            resultDiv.innerHTML = `
+                <div>🎉 欢迎 <strong>${name}</strong>！</div>
+                <div style="margin-top:10px;font-size:0.9em">
+                    <span class="loader"></span>
+                    正在准备新世界...
+                </div>
+            `;
+            resultDiv.style.display = "block";
+            setTimeout(() => {
+                try {
+                    newWindow.location.href = `https://www.cuc.edu.cn`;
+                    setTimeout(() => {
+                        resultDiv.style.display = "none";
+                    }, 3000);
+                } catch (e) {
+                    resultDiv.className = 'error';
+                    resultDiv.innerHTML = '⚠️ 页面加载失败<br><small>请检查网络连接</small>';
+                }
+            }, 2000);
+        }
+        document.getElementById('nameInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') openNewTab();
         });
     </script>
 </body>
